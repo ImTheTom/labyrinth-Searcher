@@ -1,7 +1,7 @@
-## Labyrinth Explorer
+## Labyrinth Searcher
 
-Random labyrinth generator with Pygame explorer
+A Maze Generator was forked form https://github.com/ryukinix
 
-![pic](screenshot.png)
+Upon that I built search algorithms to find the solution. 
 
-On that picture you probably will never win in that game.
+They can then witness the path found by the search algorithm by pressing space. 

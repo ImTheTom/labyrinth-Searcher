@@ -5,14 +5,13 @@
 #   Copyright © Manoel Vilela
 #
 #
-
-
 from __future__ import print_function
 import os
 import pygame
 from labyrinth_generator import generate
 from random import randint
-from time import time
+from time import time, sleep
+import mazeFinder
 
 BLOCKSIZE = 16
 WIDTH = 590
@@ -25,26 +24,14 @@ GREEN = (0, 255, 0)
 BLACK = (0, 0, 0)
 
 
-#
-# DEPRECATED
-#
-def safe_position(level):  # ??
-    a, b = len(level) - 2, len(level[0]) - 2
-    x, y = (randint(1, a), randint(1, b))
-    if level[x][y] != ' ':
-        print('Not safe', x, y, '->', level[x][y])
-        x, y = safe_position(level)
-    return (min(1, x + 1), y)
-
-
 # Class for the orange dude
 class Player(object):
-
     def __init__(self, x, y):
+        self.x = x
+        self.y = y
         self.rect = pygame.Rect(x, y, BLOCKSIZE, BLOCKSIZE)
 
     def move(self, dx, dy):
-
         # Move each axis separately.
         # Note that this checks for collisions both times.
         if dx != 0:
@@ -75,53 +62,6 @@ class Player(object):
         return self.rect.x, self.rect.y
 
 
-class AI(Player):
-    memo = {}
-    path = {}
-
-    dx = 2
-    dy = 2
-
-    def run(self):
-        self.remember()
-        self.walk()
-        self.forget_it()
-
-    def remember(self):
-        self.path[time()] = self.position
-        self.memo.setdefault(self.position, 0).__add__(1)
-
-    def walk(self):
-        motion = self.decide()
-        self.move(*motion)
-
-    def decide(self):
-        if self.memo[self.position] > 10:
-            self.change()
-
-        if len(self.path) > 2:
-            t1, t2 = sorted(self.path, reverse=True)[:2]
-            (x1, y1), (x2, y2) = self.path[t1], self.path[t2]
-            diff = ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5
-            if not diff:
-                self.change()
-
-        return self.dx, self.dy
-
-    def forget_it(self):
-        if len(self.path) > 3:
-            del self.path[min(self.path)]
-
-    def change(self):
-        from random import choice
-        dice = choice([0, 1])
-
-        if dice:
-            self.dx *= -1
-        else:
-            self.dy *= -1
-
-
 # Nice class to hold a wall rect
 class Wall(object):
     def __init__(self, pos):
@@ -129,16 +69,8 @@ class Wall(object):
         self.rect = pygame.Rect(pos[0], pos[1], BLOCKSIZE, BLOCKSIZE)
 
 
-def draw_counter(time):
-    text = pygame.font.Font('freesansbold.ttf', BLOCKSIZE)
-    text_surf = text.render('Time: {:04.1f}'.format(time), True, WHITE)
-    text_rect = text_surf.get_rect()
-    text_rect.midright = (WIDTH - 40, HEIGHT - BLOCKSIZE // 2)
-    screen.blit(text_surf, text_rect)
-
-
 def setup():
-    global walls, player, clock, end_rect, screen, computer
+    global walls, player, clock, end_rect, screen
     # Initialise pygame
     os.environ["SDL_VIDEO_CENTERED"] = "1"
     pygame.init()
@@ -148,12 +80,9 @@ def setup():
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
     clock = pygame.time.Clock()
-    walls = []  # List to hold the walls
+    walls = []
     level = generate()
-
-    # Holds the level layout in a list of strings.
-
-    # Parse the level string above. W = wall, E = exit
+    
     x = y = 0
     for row in level:
         for col in row:
@@ -163,19 +92,46 @@ def setup():
                 end_rect = pygame.Rect(x, y, BLOCKSIZE, BLOCKSIZE)
             elif col == "P":
                 player = Player(x, y)
-            elif col == "C":
-                computer = AI(x, y)
             x += BLOCKSIZE
         y += BLOCKSIZE
         x = 0
 
     return screen, clock, walls, player, end_rect
 
+def playOut(actions, called):
+    if not (called):
+        for action in actions:
+
+            if(action == "Move Up"):
+                player.rect.y -= BLOCKSIZE
+            elif(action == "Move Down"):
+                player.rect.y += BLOCKSIZE
+            elif(action == "Move Right"):
+                player.rect.x += BLOCKSIZE
+            elif(action == "Move Left"):
+                player.rect.x -= BLOCKSIZE
+
+            updateScreen(player, end_rect, walls)
+
+            sleep(1)
+    return True
+
+
+def updateScreen(player, end_rect, walls):
+    # Draw the scene
+    screen.fill(BLACK)
+    for wall in walls:
+        pygame.draw.rect(screen, WHITE, wall.rect)
+    pygame.draw.rect(screen, RED, end_rect)
+    pygame.draw.rect(screen, GREEN, player.rect)
+    pygame.display.flip()
+    
 
 def game():
     setup()
     running = True
-    start = time()
+    called = False
+    path = mazeFinder.findSolution(player, end_rect, walls)
     while running:
 
         clock.tick(60)
@@ -196,22 +152,11 @@ def game():
             player.move(0, -2)
         if key[pygame.K_DOWN]:
             player.move(0, 2)
+        if key[pygame.K_SPACE]:
+            called = playOut(path,called)
 
-        # Just added this to make it slightly fun ;)
-        if player.rect.colliderect(end_rect):
-            raise SystemExit("You win! @{:2f}s".format(time() - start))
-        if computer.rect.colliderect(end_rect):
-            raise SystemExit("You lost! The computer wins")
-        # Draw the scene
-        screen.fill(BLACK)
-        computer.run()
-        for wall in walls:
-            pygame.draw.rect(screen, WHITE, wall.rect)
-        pygame.draw.rect(screen, RED, end_rect)
-        pygame.draw.rect(screen, GREEN, player.rect)
-        pygame.draw.rect(screen, YELLOW, computer.rect)
-        draw_counter(time() - start)
-        pygame.display.flip()
+        updateScreen(player, end_rect, walls)
+        
 
 if __name__ == '__main__':
     game()

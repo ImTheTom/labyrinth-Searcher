@@ -6,11 +6,10 @@
 #   Copyleft © Manoel Vilela
 #
 #
-
 from __future__ import print_function
 from random import shuffle, randrange
 
-WIDTH, HEIGHT = 12, 14
+WIDTH, HEIGHT = 2,3
 
 
 def make_maze(w=WIDTH, h=HEIGHT):
@@ -41,8 +40,6 @@ def draw_maze(nowalls, w=WIDTH, h=HEIGHT):
     hor = [["+--"] * w + ['+'] for _ in range(h + 1)]
 
     for (x, y, x_n, y_n) in nowalls:
-        # print(x, y, x_n, y_n)
-
         if x_n == x:
             ver[x][max(y, y_n)] = "   "
         if y_n == y:
@@ -59,7 +56,6 @@ def draw_maze(nowalls, w=WIDTH, h=HEIGHT):
 def random_replace(maze, block):
     from random import randint
     x, y = randint(1, len(maze) - 2), randint(0, len(maze[0]) - 1)
-    print('Random end: ', x, y)
     if maze[x][y] == ' ':
         maze[x] = maze[x][:y] + block + maze[x][y + 1:]
     else:
@@ -78,7 +74,7 @@ def draw(maze):
         print('{:>2}'.format(x), line)
 
 
-def generate(blocks='EPC'):
+def generate(blocks='EP'):
     nw = make_maze()
     maze = draw_maze(nw)
     # nwabs = nowallsabs(nw)
