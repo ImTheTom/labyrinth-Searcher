@@ -1,6 +1,7 @@
 import labyrinth_explorer
 import pygame
 import search
+import random
 
 import itertools
 
@@ -19,7 +20,9 @@ class Problem(object):
         self.initial = initial; self.goal = goal
 
     def actions(self, state):
-        return["Move Up", "Move Down", "Move Right", "Move Left"]
+        actionList = ["Move Up", "Move Down", "Move Right", "Move Left"]
+        random.shuffle(actionList)
+        return actionList
 
     def result(self, node, action):
         state = node.state
