@@ -6,11 +6,9 @@
 #   Copyleft © Manoel Vilela
 #
 #
-from __future__ import print_function
+
+WIDTH,HEIGHT = 2,3
 from random import shuffle, randrange
-
-WIDTH, HEIGHT = 2,3
-
 
 def make_maze(w=WIDTH, h=HEIGHT):
 
@@ -74,9 +72,9 @@ def draw(maze):
         print('{:>2}'.format(x), line)
 
 
-def generate(blocks='EP'):
-    nw = make_maze()
-    maze = draw_maze(nw)
+def generate(width,height,blocks='EP'):
+    nw = make_maze(width,height)
+    maze = draw_maze(nw,width,height)
     # nwabs = nowallsabs(nw)
     for block in blocks:
         maze = random_replace(maze, block)
