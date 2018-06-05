@@ -4,7 +4,11 @@ A Maze Generator was forked form https://github.com/ryukinix
 
 Upon that I built search algorithms to find the solution. 
 
-They can then witness the path found by the search algorithm by pressing space. 
+They can then witness the path found by the search algorithm by pressing space.
+
+## How to use
+
+Start the launcher.py script. Read the help pdf for more help. 
 
 ### Suggested Set up
 
