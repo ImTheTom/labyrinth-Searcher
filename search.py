@@ -3,7 +3,17 @@ import heapq
 import itertools
 
 class Node:
+    '''
+    Used to store information for the search algorithms
+    such as the sate, parent node, action to the node,
+    the path cost from node to node, the problem it is used in
+    and the depth of the current node
+    '''
     def __init__(self, state, parent=None, action=None, pathCost=0, problem=None):
+        '''
+        Used to initialise the node class. A lot of search algorithms need particular
+        properties of a node. This class is used for all of them
+        '''
         self.state = state
         self.parent = parent
         self.action = action
@@ -14,6 +24,10 @@ class Node:
             self.depth = parent.depth +1
 
     def __lt__(self, other):
+        '''
+        Used since heapq needs to be able to use the "<" symbol
+        between two nodes.
+        '''
         if(self.problem==None):
             raise Exception
         currentNumber = self.problem.f(self)
@@ -23,6 +37,9 @@ class Node:
         return False
 
     def path(self):
+        '''
+        Used to get the path from the initial node to the current node
+        '''
         actions = []
         actions.append(self.action)
         parent = self.parent
@@ -31,6 +48,9 @@ class Node:
             parent = parent.parent
         actions = actions[::-1]
         return actions[1:]
+
+#-----------------------------------------------------------------------------------------------#
+#                          The rest of the code are search algorithms                           #
 
 def breadthFirstTreeSearch(problem):
     queue = deque()

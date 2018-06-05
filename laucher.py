@@ -7,13 +7,23 @@ import webbrowser
 from labyrinth_explorer import game
 
 class GUI:
+    '''
+    GUI Class. Used to initialise and interact with the maze applicaiton
+    Can select the algoirthm, method and whether or not actions are filtered.
+    '''
     def __init__(self, master):
+        '''
+        Initialise the GUI by setting it up. Bunch of boilerplate code.
+        '''
         self.master = master
+
         self.menuBar = Menu(self.master)
         self.menuBar.add_command(label="Results", command=self.showResults)
         self.menuBar.add_command(label="Help", command=self.showHelp)
         self.menuBar.add_command(label="Quit", command=root.quit)
+
         master.title("Maze Searcher")
+
         self.method = IntVar()
         self.method.set(0)
         self.filterAct = IntVar()
@@ -39,7 +49,6 @@ class GUI:
         self.asgs = Radiobutton(master, text = "A* Graph Search",variable=self.method, value=9)
 
         self.filterActions = Checkbutton(master, text="Filter actions?", variable=self.filterAct)
-
 
         self.button = Button(master, text="Start", command=self.start)
 
@@ -68,6 +77,11 @@ class GUI:
 
 
     def start(self):
+        '''
+        Function to start the applicaiton. It checks if the width and
+        height values are valid and can continue. Also gets the algorithm
+        and whether or not the actions are filtered.
+        '''
         try:
             method = self.method.get()
             width = int(self.mazeWidthEntry.get())
@@ -83,13 +97,20 @@ class GUI:
             self.errorLabel['text']="Enter positive width and height values"
 
     def showHelp(self):
-        path  = os.path.join(os.path.dirname(__file__),'help.txt')
+        '''
+        Used to open up the help pdf file
+        '''
+        path  = os.path.join(os.path.dirname(__file__),'help.pdf')
         webbrowser.open_new(path)
 
     def showResults(self):
+        '''
+        Used to open up the results txt file
+        '''
         path  = os.path.join(os.path.dirname(__file__),'results.txt')
         webbrowser.open_new(path)
 
-root = Tk()
-gui = GUI(root)
-root.mainloop()
+if __name__ == '__main__':
+    root = Tk()
+    gui = GUI(root)
+    root.mainloop()
