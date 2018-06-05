@@ -8,4 +8,4 @@ They can then witness the path found by the search algorithm by pressing space.
 
 ### Suggested Set up
 
-Try A start graph search with filter actions on a 10 by 14 maze.
+Try A star graph search with filter actions on a 10 by 14 maze.
