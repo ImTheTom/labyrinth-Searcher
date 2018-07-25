@@ -8,4 +8,16 @@ Solver took 1.2816166877746582, for 10 by 14 maze using method ID 9 with filter 
 Solver took 0.060837507247924805, for 10 by 14 maze using method ID 9 with filter actions set to 1
 Solver took 1.0656991004943848, for 10 by 14 maze using method ID 9 with filter actions set to 1
 Solver took 0.820805549621582, for 10 by 14 maze using method ID 9 with filter actions set to 1
+Solver took 0.003989458084106445, for 10 by 14 maze using method ID 9 with filter actions set to 1
+Solver took 0.034906625747680664, for 10 by 14 maze using method ID 9 with filter actions set to 1
+Solver took 0.0049860477447509766, for 5 by 5 maze using method ID 3 with filter actions set to 0
+Solver took 0.0, for 5 by 5 maze using method ID 3 with filter actions set to 0
+Solver took 0.01495981216430664, for 10 by 10 maze using method ID 3 with filter actions set to 0
+Solver took 0.024932861328125, for 10 by 10 maze using method ID 3 with filter actions set to 0
+Solver took 0.12267160415649414, for 15 by 15 maze using method ID 3 with filter actions set to 0
+Solver took 0.02991938591003418, for 15 by 15 maze using method ID 3 with filter actions set to 0
+Solver took 0.05884218215942383, for 12 by 14 maze using method ID 3 with filter actions set to 0
+Solver took 0.135636568069458, for 15 by 10 maze using method ID 9 with filter actions set to 1
+Solver took 0.10921311378479004, for 10 by 15 maze using method ID 9 with filter actions set to 1
+Solver took 0.017952442169189453, for 10 by 14 maze using method ID 9 with filter actions set to 1
 
